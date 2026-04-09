@@ -1,8 +1,24 @@
-# TSP и OCSP клиенты на Python с поддержкой ГОСТ
+# Различные crypto утилиты для тестов
+
+## server.py
+
+HTTP API поверх OpenSSL с GOST engine для выдачи сертификатов по CSR, также предоставляет OCSP responder и TSA сервер.
+Сервер добавляет в выдаваемые сертификаты AIA (OCSP/caIssuers) и CRLDP, а для OCSP использует `index.txt`, чтобы возвращать статусы сертификатов.
+
+swagger: `http://localhost:8080/docs#/`
+
+также см. [server.md](server.md)
+
+## CSR generator
+
+`generate_csr.py` генерирует PKCS#10 CSR под Windows через CryptoPro CSP с поддержкой ГОСТ.
+Позволяет собрать Subject из параметров (включая типовые российские OID’ы) и при необходимости сохранить CSR в base64 и/или PEM для отправки в УЦ или на `server.py`.
+
+## ---
 
 Клиенты для запросов к **TSP** (RFC 3161) и **OCSP** с использованием **ГОСТ Р 34.11-2012** для хешей в протоколе.
 
-## Установка
+### Установка
 
 ```bash
 pip install -r requirements.txt
@@ -41,12 +57,12 @@ python cli.py tsp http://tsa.example.com/tsp/tsp.srf document.pdf
 
 Сохраняет цепочку в `./output`
 
-## Ограничения
+### Ограничения
 
 - **Подпись OCSP-ответа** и **подпись TimeStampToken (CMS)** по ГОСТ не проверяются в этом пакете; для полной криптографической проверки используйте КриптоПро CSP или расширение с поддержкой ГОСТ CMS.
 
 
-## Пример TSP
+### Пример TSP
 
 `http://pki.tax.gov.ru/tsp/tsp.srf`
 

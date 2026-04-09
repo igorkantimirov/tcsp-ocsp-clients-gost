@@ -1,0 +1,24 @@
+diff --git a/crypto/ts/ts_rsp_sign.c b/crypto/ts/ts_rsp_sign.c
+index 4ab9067b05..4f7e8e1d2a 100644
+--- a/crypto/ts/ts_rsp_sign.c
++++ b/crypto/ts/ts_rsp_sign.c
+@@ -742,13 +742,18 @@ static int ts_RESP_sign(TS_RESP_CTX *ctx)
+         if (!ossl_ess_add1_signing_cert(si, sc)) {
+             ERR_raise(ERR_LIB_TS, TS_R_ESS_ADD_SIGNING_CERT_ERROR);
+             goto err;
+         }
+     } else {
+-        sc2 = OSSL_ESS_signing_cert_v2_new_init(ctx->ess_cert_id_digest,
+-                                                ctx->signer_cert, certs, 0);
++        /*
++         * Include issuerSerial for the signing certificate (set_issuer_serial=1).
++         * This is needed for CryptoPro when building
++         * complete-certificate-references.
++         */
++        sc2 = OSSL_ESS_signing_cert_v2_new_init(ctx->ess_cert_id_digest,
++                                                ctx->signer_cert, certs, 1);
+         if (sc2 == NULL)
+             goto err;
+ 
+         if (!ossl_ess_add1_signing_cert_v2(si, sc2)) {
+             ERR_raise(ERR_LIB_TS, TS_R_ESS_ADD_SIGNING_CERT_V2_ERROR);

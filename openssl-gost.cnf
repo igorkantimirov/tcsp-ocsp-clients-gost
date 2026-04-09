@@ -1,0 +1,16 @@
+openssl_conf = openssl_init
+
+[openssl_init]
+engines = engine_section
+
+[engine_section]
+gost = gost_section
+
+[gost_section]
+default_algorithms = ALL
+
+[req]
+distinguished_name = req_dn
+default_md = md_gost12_256
+
+[req_dn]
